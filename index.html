@@ -465,7 +465,7 @@ video#mainVideo {
 #star-layer {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 4;
   pointer-events: none;
   overflow: hidden;
 }
@@ -826,9 +826,10 @@ function setNightMode() {
   const layer = document.getElementById('star-layer');
   overlay.classList.add('active');
   starsVisible = true;
+  layer.innerHTML = '';
+  spawnStars();
   layer.style.opacity = '1';
   layer.style.transition = 'opacity 0.8s ease';
-  if (layer.children.length === 0) spawnStars();
 }
 
 function setDayMode() {
@@ -836,14 +837,14 @@ function setDayMode() {
   const layer = document.getElementById('star-layer');
   overlay.classList.remove('active');
   starsVisible = false;
-  layer.style.opacity = '0';
   layer.style.transition = 'opacity 0.8s ease';
+  layer.style.opacity = '0';
+  setTimeout(() => { layer.innerHTML = ''; }, 800);
 }
 
 
 function spawnStars() {
   const layer = document.getElementById('star-layer');
-  if (layer.children.length > 0) return;
   const count = 40;
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
