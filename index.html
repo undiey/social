@@ -214,6 +214,13 @@ img#mainBg {
   position: relative;
   z-index: 3;
   flex-shrink: 0;
+  animation: avatarSway 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes avatarSway {
+  0%   { transform: rotate(-1.5deg); }
+  50%  { transform: rotate(1.5deg); }
+  100% { transform: rotate(-1.5deg); }
 }
 #avatar img {
   width: 100%;
