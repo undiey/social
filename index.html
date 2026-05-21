@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ульяна</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: black;
+  font-family: 'Arial Black', sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Загрузка */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+#loader span {
+  font-size: 32px;
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 30px #ccc;
+  animation: flicker 1.2s infinite alternate;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+}
+@keyframes flicker {
+  0% { opacity: 0.8; text-shadow: 0 0 6px white; }
+  100% { opacity: 1; text-shadow: 0 0 14px white, 0 0 26px #ccc; }
+}
+
+/* Стартовый экран */
+#start-screen {
+  opacity: 0.6;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: url('Picsart_25-07-06_12-49-05-878.jpg') center center no-repeat;
+  background-size: 300%;
+  animation: moveBG 40s ease-in-out infinite alternate;
+  flex-direction: column;
+  cursor: default;
+}
+@keyframes moveBG {
+  0% { background-position: center center; }
+  100% { background-position: 52% 48%; }
+}
+#start-screen h1 {
+  font-size: 64px;
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 30px #ccc;
+  animation: flicker 1.5s infinite alternate;
+  cursor: pointer;
+  transition: transform 0.1s;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+}
+#start-screen h1:active {
+  transform: scale(0.92);
+}
+
+/* Подсказка "жми" */
+#hint-wrap {
+  position: absolute;
+  top: calc(50% + 30px);
+  left: calc(50% + 10px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+  opacity: 0;
+  animation: none;
+  pointer-events: none;
+}
+#hint-wrap.visible {
+  animation: hintFadeIn 0.6s ease forwards;
+}
+@keyframes hintFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#hint-text {
+  font-size: 15px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.75);
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+#hint-arrow {
+  width: 90px;
+  height: 100px;
+  opacity: 0.65;
+}
+
+/* Канвас для частиц */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  display: none;
+}
+
+/* Оверлей плавного перехода */
+#transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9997;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+/* Плавное появление bio */
+#video-section {
+  opacity: 0;
+}
+#video-section.fade-in {
+  animation: fadeInBio 0.8s ease forwards;
+}
+@keyframes fadeInBio {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Видео и блок */
+#video-section {
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  min-height: 100%;
+  position: relative;
+  padding: 60px 20px 100px 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+video#mainVideo {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  background: black;
+  pointer-events: none;
+}
+
+/* Эффект сломанного ТВ */
+#glitch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  background: rgba(255,255,255,0.03);
+  animation: glitchEffect 0.1s infinite;
+}
+@keyframes glitchEffect {
+  0%   { opacity: 0.02; transform: translate(0,0); }
+  10%  { opacity: 0.05; transform: translate(-2px,1px); }
+  20%  { opacity: 0.03; transform: translate(1px,-1px); }
+  30%  { opacity: 0.06; transform: translate(-1px,2px); }
+  40%  { opacity: 0.04; transform: translate(2px,-2px); }
+  50%  { opacity: 0.05; transform: translate(0,1px); }
+  60%  { opacity: 0.03; transform: translate(-2px,0); }
+  70%  { opacity: 0.06; transform: translate(1px,1px); }
+  80%  { opacity: 0.04; transform: translate(-1px,-1px); }
+  90%  { opacity: 0.05; transform: translate(2px,0); }
+  100% { opacity: 0.03; transform: translate(0,0); }
+}
+
+/* Аватар */
+#avatar-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+#avatar {
+  width: 260px;
+  height: 260px;
+  overflow: visible;
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+#avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+}
+/* Крылья слева и справа через SVG-фоны */
+.wing {
+  position: absolute;
+  top: 50%;
+  width: 160px;
+  height: 160px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 18px rgba(255,255,255,0.9)) drop-shadow(0 0 40px rgba(255,255,255,0.5));
+  animation: wingGlow 3s ease-in-out infinite alternate;
+}
+.wing-left {
+  right: calc(50% + 55px);
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='white' opacity='0.95'%3E%3Cellipse cx='60' cy='100' rx='55' ry='18' transform='rotate(-30 60 100)'/%3E%3Cellipse cx='50' cy='80' rx='48' ry='14' transform='rotate(-45 50 80)'/%3E%3Cellipse cx='45' cy='60' rx='40' ry='12' transform='rotate(-55 45 60)'/%3E%3Cellipse cx='42' cy='42' rx='32' ry='10' transform='rotate(-65 42 42)'/%3E%3Cellipse cx='40' cy='26' rx='22' ry='8' transform='rotate(-72 40 26)'/%3E%3Cellipse cx='70' cy='115' rx='45' ry='14' transform='rotate(-20 70 115)'/%3E%3C/g%3E%3C/svg%3E");
+}
+.wing-right {
+  left: calc(50% + 55px);
+  transform: translateY(-50%) scaleX(-1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='white' opacity='0.95'%3E%3Cellipse cx='60' cy='100' rx='55' ry='18' transform='rotate(-30 60 100)'/%3E%3Cellipse cx='50' cy='80' rx='48' ry='14' transform='rotate(-45 50 80)'/%3E%3Cellipse cx='45' cy='60' rx='40' ry='12' transform='rotate(-55 45 60)'/%3E%3Cellipse cx='42' cy='42' rx='32' ry='10' transform='rotate(-65 42 42)'/%3E%3Cellipse cx='40' cy='26' rx='22' ry='8' transform='rotate(-72 40 26)'/%3E%3Cellipse cx='70' cy='115' rx='45' ry='14' transform='rotate(-20 70 115)'/%3E%3C/g%3E%3C/svg%3E");
+}
+@keyframes wingGlow {
+  0%   { filter: drop-shadow(0 0 14px rgba(255,255,255,0.8)) drop-shadow(0 0 30px rgba(255,255,255,0.4)); opacity: 0.88; }
+  100% { filter: drop-shadow(0 0 28px rgba(255,255,255,1))   drop-shadow(0 0 60px rgba(255,255,255,0.7)); opacity: 1; }
+}
+
+/* Ник */
+#username {
+  font-size: 26px;
+  color: white;
+  text-shadow: 0 0 14px rgba(255,255,255,0.8);
+  margin-top: 6px;
+  margin-bottom: 6px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  font-family: 'Georgia', serif;
+  z-index: 2;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Сообщение под ником */
+#name-message {
+  font-size: 13px;
+  color: #ff6b6b;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 0.08em;
+  min-height: 16px;
+  margin-bottom: 10px;
+  z-index: 2;
+  text-shadow: 0 0 8px rgba(255,100,100,0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#name-message.visible {
+  opacity: 1;
+}
+
+/* Соцсети — без рамки, только линии */
+.social-box {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  width: 280px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  z-index: 2;
+}
+.social-box a {
+  font-size: 13px;
+  color: white;
+  text-decoration: none;
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  border-radius: 0;
+  background: none;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.2em;
+  font-family: 'Arial', sans-serif;
+  font-weight: 400;
+  -webkit-tap-highlight-color: transparent;
+  animation: linePulse 3s ease-in-out infinite alternate;
+}
+.social-box a:first-child {
+  border-top: 1px solid rgba(255,255,255,0.5);
+}
+.social-box a:nth-child(2) { animation-delay: 0.5s; }
+.social-box a:nth-child(3) { animation-delay: 1s; }
+.social-box a:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes linePulse {
+  0%   { border-color: rgba(255,255,255,0.2); box-shadow: none; }
+  100% { border-color: rgba(255,255,255,0.7); box-shadow: 0 1px 10px rgba(255,255,255,0.25), 0 -1px 10px rgba(255,255,255,0.1); }
+}
+.social-box a:hover, .social-box a:active {
+  opacity: 0.65;
+  background: none;
+}
+.social-link-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.social-box a i {
+  margin-right: 0;
+  font-size: 18px;
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 14px rgba(255,255,255,0.5));
+  animation: iconGlow 3s ease-in-out infinite alternate;
+}
+.social-box a:nth-child(2) i { animation-delay: 0.4s; }
+.social-box a:nth-child(3) i { animation-delay: 0.8s; }
+.social-box a:nth-child(4) i { animation-delay: 1.2s; }
+
+@keyframes iconGlow {
+  0%   { filter: drop-shadow(0 0 3px rgba(255,255,255,0.6)) drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
+  100% { filter: drop-shadow(0 0 8px rgba(255,255,255,1))   drop-shadow(0 0 20px rgba(255,255,255,0.7)); }
+}
+
+.social-link-name {
+  letter-spacing: 0.22em;
+  text-shadow: 0 0 8px rgba(255,255,255,0.6), 0 0 20px rgba(255,255,255,0.3);
+  animation: textShimmer 4s ease-in-out infinite alternate;
+}
+@keyframes textShimmer {
+  0%   { text-shadow: 0 0 4px rgba(255,255,255,0.4), 0 0 10px rgba(255,255,255,0.2); }
+  100% { text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 24px rgba(255,255,255,0.5); }
+}
+
+/* Звёздочка — 4-лучевая, сидит на линии снизу справа */
+.social-box a {
+  position: relative;
+}
+.sparkle {
+  position: absolute;
+  bottom: -9px;
+  right: -4px;
+  font-size: 0;
+  width: 16px;
+  height: 16px;
+  z-index: 3;
+}
+.sparkle::before,
+.sparkle::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 2px;
+  left: 50%;
+  top: 50%;
+  transform-origin: center center;
+  box-shadow: 0 0 6px 2px rgba(255,255,255,0.8), 0 0 14px 4px rgba(255,255,255,0.4);
+}
+/* Вертикальный луч */
+.sparkle::before {
+  width: 2px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+}
+/* Горизонтальный луч */
+.sparkle::after {
+  width: 16px;
+  height: 2px;
+  transform: translate(-50%, -50%);
+}
+/* Диагональные лучи через обёртку */
+.sparkle .star-diag {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 10px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 0 5px 1px rgba(255,255,255,0.7);
+  transform-origin: center center;
+}
+.sparkle .star-diag:first-child  { transform: translate(-50%, -50%) rotate(45deg); }
+.sparkle .star-diag:last-child   { transform: translate(-50%, -50%) rotate(-45deg); }
+
+@keyframes starTwinkle {
+  0%   { opacity: 0.4; transform: scale(0.75); filter: brightness(0.8); }
+  50%  { opacity: 1;   transform: scale(1.15); filter: brightness(1.4); }
+  100% { opacity: 0.6; transform: scale(0.9);  filter: brightness(1); }
+}
+.sparkle {
+  animation: starTwinkle 2.5s ease-in-out infinite;
+}
+.social-box a:nth-child(1) .sparkle { animation-delay: 0s; }
+.social-box a:nth-child(2) .sparkle { animation-delay: 0.6s; }
+.social-box a:nth-child(3) .sparkle { animation-delay: 1.2s; }
+.social-box a:nth-child(4) .sparkle { animation-delay: 1.8s; }
+}
+
+/* Убираем синий highlight со всех ссылок и кликабельных элементов */
+a, button, div[onclick] {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Кнопка паузы */
+#pause-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 24px rgba(255,255,255,0.1);
+  transition: box-shadow 0.3s ease, transform 0.15s ease;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 8px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#pause-button:hover {
+  box-shadow: 0 0 16px rgba(255,255,255,0.6), 0 0 36px rgba(255,255,255,0.2);
+  transform: scale(1.08);
+}
+#pause-button:active {
+  transform: scale(0.95);
+}
+#pause-button:focus {
+  outline: none;
+}
+
+/* Футер */
+footer {
+  display: none;
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 300;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);
+  z-index: 2;
+  margin-top: 90px;
+  padding-bottom: 24px;
+  box-sizing: border-box;
+  opacity: 0.8;
+}
+footer a {
+  text-decoration: none;
+  color: #ff6b6b;
+}
+
+/* Статус online/offline */
+#status-badge {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 5px 12px 5px 9px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Статус — сообщение при клике */
+#status-message {
+  position: fixed;
+  z-index: 9999;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 8px 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: 'Arial', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  transform: translateX(-50%);
+  max-width: 90vw;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+#status-message.visible {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  #status-message { font-size: 11px; padding: 7px 12px; }
+  #status-badge { top: 12px; }
+  #avatar { width: 220px; height: 220px; }
+  #username { font-size: 22px; }
+  .social-box { width: 90vw; }
+  #video-section { padding: 50px 16px 16px 16px; }
+}
+
+@media (min-width: 768px) {
+  #avatar { width: 300px; height: 300px; }
+  #username { font-size: 30px; }
+  .social-box { width: 360px; }
+  #video-section {
+    justify-content: center;
+    padding: 80px 40px 40px 40px;
+  }
+  footer {
+    position: fixed;
+    bottom: 16px;
+    left: 0;
+    width: 100%;
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+}
+#status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+#status-dot.online {
+  background: #3dff7a;
+  box-shadow: 0 0 6px #3dff7a, 0 0 14px #3dff7a;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+#status-dot.offline {
+  background: #ff4444;
+  box-shadow: 0 0 6px #ff4444, 0 0 14px #ff4444;
+  animation: pulse-red 2s ease-in-out infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 5px #3dff7a, 0 0 12px #3dff7a; }
+  50%       { box-shadow: 0 0 10px #3dff7a, 0 0 24px #3dff7a; }
+}
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 5px #ff4444, 0 0 12px #ff4444; }
+  50%       { box-shadow: 0 0 10px #ff4444, 0 0 24px #ff4444; }
+}
+#status-text {
+  font-size: 12px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: white;
+}
+/* 67 пасхалка */
+#sixtyseven-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  display: none;
+}
+#sixtyseven-result {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  width: max-content;
+  white-space: nowrap;
+}
+#sixtyseven-result .big-num {
+  font-size: 64px;
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,200,200,0.6);
+  line-height: 1;
+  display: block;
+  letter-spacing: 0.1em;
+}
+#sixtyseven-result .sub-text {
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  display: block;
+  margin-top: 8px;
+  min-height: 22px;
+}
+#sixtyseven-result .love-text {
+  font-size: 18px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: #ff6b6b;
+  text-shadow: 0 0 12px rgba(255,100,100,0.6);
+  display: block;
+  transition: opacity 0.4s ease;
+}
+</style>
+<body>
+<div id="loader">
+  <span id="loading-text">Загрузка</span>
+</div>
+
+<div id="status-badge" onclick="toggleStatusMessage()">
+  <div id="status-dot"></div>
+  <span id="status-text"></span>
+</div>
+<div id="status-message"></div>
+
+<canvas id="particle-canvas"></canvas>
+<div id="transition-overlay"></div>
+
+<div id="start-screen">
+  <h1 onclick="startSite(event)">meow</h1>
+  <div id="hint-wrap">
+    <svg id="hint-arrow" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Начало снизу-справа, петля в середине, конец уходит вверх-влево со стрелкой -->
+      <path d="M 100,110 C 75,105 55,95 52,78 C 49,65 58,58 65,62 C 72,66 70,76 62,76 C 54,76 50,68 53,60 C 58,45 45,25 28,12"
+        fill="none" stroke="white" stroke-width="2" stroke-dasharray="6,4"
+        stroke-linecap="round"/>
+      <!-- Наконечник вверх-влево -->
+      <polyline points="38,10 28,12 30,23"
+        fill="none" stroke="white" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span id="hint-text">жми</span>
+  </div>
+</div>
+
+<div id="video-section">
+  <video autoplay playsinline id="mainVideo">
+    <source src="found.mp4" type="video/mp4">
+  </video>
+
+  <div id="glitch"></div>
+
+  <div id="avatar-wrap">
+    <div id="avatar" onclick="sixSeven()">
+      <img src="avatar.png" alt="avatar" draggable="false" oncontextmenu="return false;">
+    </div>
+  </div>
+  <div id="sixtyseven-result"></div>
+  <div id="username" onclick="toggleNameMessage()">𓆩undiey𓆪</div>
+  <div id="name-message"></div>
+  <div class="social-box">
+    <a href="https://t.me/tgkuliana" target="_blank">
+      <div class="social-link-left"><i class="fab fa-telegram"></i><span class="social-link-name">TELEGRAM</span></div>
+      <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
+    </a>
+    <a href="https://www.tiktok.com/@undiey" target="_blank">
+      <div class="social-link-left"><i class="fab fa-tiktok"></i><span class="social-link-name">TIKTOK</span></div>
+      <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
+    </a>
+    <a href="https://www.instagram.com/undieyy?igsh=dWlkazF4b2xlNWlk" target="_blank">
+      <div class="social-link-left"><i class="fab fa-instagram"></i><span class="social-link-name">INSTAGRAM</span></div>
+      <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
+    </a>
+    <a href="https://pin.it/1jaSwwc2g" target="_blank">
+      <div class="social-link-left"><i class="fab fa-pinterest"></i><span class="social-link-name">PINTEREST</span></div>
+      <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
+    </a>
+  </div>
+
+  <div id="pause-button" onclick="togglePlayback()"><i id="pause-icon" class="fas fa-pause"></i></div>
+  <footer>© 2023 - 2028 Все права защищены — Контент защищён авторским правом. Создатель 🖤 <a href="https://t.me/undiey" target="_blank">@undiey</a></footer>
+</div>
+
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById('loader').remove();
+    const startScreen = document.getElementById('start-screen');
+    startScreen.style.display = 'flex';
+    // Подсказка через 1.5 сек
+    setTimeout(() => {
+      const hint = document.getElementById('hint-wrap');
+      if (hint) hint.classList.add('visible');
+    }, 1500);
+  }, 3000);
+});
+
+function startSite(e) {
+  const startScreen = document.getElementById('start-screen');
+  const videoSection = document.getElementById('video-section');
+  const video = document.getElementById('mainVideo');
+  const footer = document.querySelector('footer');
+  const canvas = document.getElementById('particle-canvas');
+  const overlay = document.getElementById('transition-overlay');
+  const ctx = canvas.getContext('2d');
+
+  // Размер канваса
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+
+  // Координаты клика
+  const cx = e ? e.clientX : window.innerWidth / 2;
+  const cy = e ? e.clientY : window.innerHeight / 2;
+
+  // Создаём частицы
+  const particles = [];
+  const colors = ['#ffffff', '#ff4444', '#ff8888', '#ffcccc', '#ff2222', '#eeeeee'];
+  for (let i = 0; i < 120; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 3 + Math.random() * 9;
+    const size = 2 + Math.random() * 5;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      decay: 0.018 + Math.random() * 0.022,
+      gravity: 0.18 + Math.random() * 0.12
+    });
+  }
+
+  // Анимация частиц
+  let frame = 0;
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    for (const p of particles) {
+      if (p.alpha <= 0) continue;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.97;
+      p.alpha -= p.decay;
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    frame++;
+    // Через 18 кадров начинаем fade overlay
+    if (frame === 18) {
+      overlay.style.opacity = '1';
+    }
+    if (alive && frame < 80) {
+      requestAnimationFrame(animateParticles);
+    } else {
+      // Показываем bio
+      canvas.style.display = 'none';
+      startScreen.style.display = 'none';
+      videoSection.style.display = 'flex';
+      videoSection.classList.add('fade-in');
+      footer.style.display = 'block';
+      video.play().catch(err => console.error("⚠️ Ошибка воспроизведения:", err));
+
+      // Убираем overlay
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+      }, 100);
+    }
+  }
+
+  animateParticles();
+}
+
+function togglePlayback() {
+  const video = document.getElementById('mainVideo');
+  const icon = document.getElementById('pause-icon');
+  const glitch = document.getElementById('glitch');
+
+  if (video.paused) {
+    video.play();
+    icon.className = 'fas fa-pause';
+    glitch.style.animationPlayState = 'running';
+  } else {
+    video.pause();
+    icon.className = 'fas fa-play';
+    glitch.style.animationPlayState = 'paused';
+  }
+}
+
+const loadingText = document.getElementById('loading-text');
+let dots = 0;
+setInterval(() => {
+  dots = (dots + 1) % 4;
+  loadingText.textContent = 'Загрузка' + '.'.repeat(dots);
+}, 500);
+
+// ======= СТАТУС ONLINE/OFFLINE =======
+function updateStatus() {
+  const hour = new Date().getHours();
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  if (hour >= 8 && hour < 22) {
+    dot.className = 'online';
+    text.textContent = 'online';
+    text.style.textTransform = 'none';
+  } else {
+    dot.className = 'offline';
+    text.textContent = 'offline';
+    text.style.textTransform = 'none';
+  }
+}
+updateStatus();
+setInterval(updateStatus, 60000);
+
+// ======= СООБЩЕНИЕ ПРИ КЛИКЕ НА СТАТУС =======
+let statusMsgOpen = false;
+let typewriterTimer = null;
+
+function toggleStatusMessage() {
+  const badge = document.getElementById('status-badge');
+  const msg = document.getElementById('status-message');
+  const hour = new Date().getHours();
+  const isOnline = hour >= 8 && hour < 22;
+
+  if (statusMsgOpen) {
+    msg.classList.remove('visible');
+    statusMsgOpen = false;
+    if (typewriterTimer) clearTimeout(typewriterTimer);
+    return;
+  }
+
+  // Позиционируем под бейджем по центру экрана
+  const rect = badge.getBoundingClientRect();
+  msg.style.top = (rect.bottom + 8) + 'px';
+  msg.style.left = '50%';
+  msg.textContent = '';
+  msg.classList.add('visible');
+  statusMsgOpen = true;
+
+  const text = isOnline
+    ? 'Строю воздушные замки. Кирпичики — твои сообщения.'
+    : 'Ушла искать радугу за дождем. Вернусь, когда высплюсь или просплю эту жизнь.';
+
+  let i = 0;
+  function typeNext() {
+    if (i < text.length) {
+      msg.textContent += text[i];
+      i++;
+      typewriterTimer = setTimeout(typeNext, 38 + Math.random() * 30);
+    }
+  }
+  typeNext();
+}
+// ======= ПАСХАЛКА 67 =======
+let sixSevenState = 0; // 0=скрыто, 1=67, 2=скрыто, 3=люблю
+
+function sixSeven() {
+  sixSevenState = (sixSevenState + 1) % 4;
+
+  const result = document.getElementById('sixtyseven-result');
+  const username = document.getElementById('username');
+
+  // Скрываем
+  if (sixSevenState === 0 || sixSevenState === 2) {
+    result.style.opacity = '0';
+    setTimeout(() => { result.innerHTML = ''; }, 500);
+    return;
+  }
+
+  // Позиция — над ником, привязана к контенту (не к экрану)
+  const targetY = username.offsetTop - 90;
+  result.style.top = targetY + 'px';
+  result.innerHTML = '';
+  result.style.opacity = '0';
+
+  if (sixSevenState === 1) {
+    result.innerHTML = `
+      <span class="big-num">
+        <span id="digit6" style="display:inline-block;opacity:0;transform:translateX(-60px);transition:opacity 0.8s ease, transform 1.2s ease">6</span>
+        <span id="digit7" style="display:inline-block;opacity:0;transform:translateX(60px);transition:opacity 0.8s ease, transform 1.2s ease">7</span>
+      </span>
+      <span class="sub-text" id="sixseventext" style="opacity:0"></span>
+    `;
+    result.style.opacity = '1';
+
+    setTimeout(() => {
+      document.getElementById('digit6').style.opacity = '1';
+      document.getElementById('digit6').style.transform = 'translateX(0)';
+      document.getElementById('digit7').style.opacity = '1';
+      document.getElementById('digit7').style.transform = 'translateX(0)';
+    }, 50);
+
+    setTimeout(() => {
+      const el = document.getElementById('sixseventext');
+      if (!el) return;
+      el.style.opacity = '1';
+      const text = 'six seven';
+      let i = 0;
+      function typeIt() {
+        if (!document.getElementById('sixseventext')) return;
+        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 80); }
+      }
+      typeIt();
+    }, 1000);
+
+  } else if (sixSevenState === 3) {
+    result.style.top = (username.offsetTop - 50) + 'px';
+    result.innerHTML = `<span class="love-text" style="opacity:0"><span id="lovetext-line1"></span></span>`;
+    result.style.opacity = '1';
+    setTimeout(() => {
+      const wrap = result.querySelector('.love-text');
+      const el = document.getElementById('lovetext-line1');
+      if (!el || !wrap) return;
+      wrap.style.opacity = '1';
+      const text = 'Люблю❤️Ульяну';
+      let i = 0;
+      function typeIt() {
+        if (!document.getElementById('lovetext-line1')) return;
+        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 70); }
+      }
+      typeIt();
+    }, 100);
+  }
+}
+
+
+let nameMsgOpen = false;
+let nameTypeTimer = null;
+
+function toggleNameMessage() {
+  const msg = document.getElementById('name-message');
+  if (nameMsgOpen) {
+    msg.classList.remove('visible');
+    msg.textContent = '';
+    nameMsgOpen = false;
+    if (nameTypeTimer) clearTimeout(nameTypeTimer);
+    return;
+  }
+  msg.textContent = '';
+  msg.classList.add('visible');
+  nameMsgOpen = true;
+  const text = 'Я Ульяна, йоу';
+  let i = 0;
+  function typeNext() {
+    if (i < text.length) {
+      msg.textContent += text[i];
+      i++;
+      nameTypeTimer = setTimeout(typeNext, 45 + Math.random() * 35);
+    }
+  }
+  typeNext();
+}
+
+
+</script>
+</body>
+</html>
