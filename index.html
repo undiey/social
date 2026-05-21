@@ -414,24 +414,30 @@ footer a {
 }
 
 @media (max-width: 480px) {
-  #status-message {
-    font-size: 11px;
-    padding: 7px 12px;
-  }
-  #status-badge {
-    top: 12px;
-  }
+  #status-message { font-size: 11px; padding: 7px 12px; }
+  #status-badge { top: 12px; }
   #avatar { width: 220px; height: 220px; }
   #username { font-size: 22px; }
   .social-box { width: 90vw; }
-  #video-section { padding: 50px 16px 80px 16px; }
+  #video-section { padding: 50px 16px 16px 16px; }
 }
 
 @media (min-width: 768px) {
   #avatar { width: 300px; height: 300px; }
   #username { font-size: 30px; }
   .social-box { width: 360px; }
-  #video-section { padding: 80px 40px 100px 40px; }
+  #video-section {
+    justify-content: center;
+    padding: 80px 40px 40px 40px;
+  }
+  footer {
+    position: fixed;
+    bottom: 16px;
+    left: 0;
+    width: 100%;
+    margin-top: 0;
+    padding-bottom: 0;
+  }
 }
 #status-dot {
   width: 9px;
