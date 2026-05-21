@@ -153,6 +153,7 @@ html, body {
   text-align: center;
   min-height: 100%;
   position: relative;
+  z-index: 5;
   padding: 60px 20px 100px 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -465,7 +466,7 @@ video#mainVideo {
 #star-layer {
   position: fixed;
   inset: 0;
-  z-index: 4;
+  z-index: 6;
   pointer-events: none;
   overflow: hidden;
 }
@@ -887,7 +888,6 @@ function startSite(e) {
     videoSection.classList.add('fade-in');
     footer.style.display = 'block';
     video.play().catch(err => console.error("⚠️ Ошибка воспроизведения:", err));
-    spawnStars();
     setTimeout(() => { overlay.style.opacity = '0'; }, 100);
   }, 500);
 }
