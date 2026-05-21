@@ -167,6 +167,7 @@ video#mainVideo {
   z-index: 0;
   background: black;
   pointer-events: none;
+  display: none;
 }
 
 /* Эффект сломанного ТВ */
@@ -180,6 +181,7 @@ video#mainVideo {
   z-index: 1;
   background: rgba(255,255,255,0.03);
   animation: glitchEffect 0.1s infinite;
+  display: none;
 }
 @keyframes glitchEffect {
   0%   { opacity: 0.02; transform: translate(0,0); }
@@ -778,13 +780,12 @@ footer a {
   </div>
 </div>
 
+<video autoplay playsinline id="mainVideo">
+  <source src="found.mp4" type="video/mp4">
+</video>
+<div id="glitch"></div>
+
 <div id="video-section">
-  <video autoplay playsinline id="mainVideo">
-    <source src="found.mp4" type="video/mp4">
-  </video>
-
-  <div id="glitch"></div>
-
   <div id="avatar-wrap">
     <div id="avatar">
       <img src="avatar.png" alt="avatar" draggable="false" oncontextmenu="return false;">
@@ -887,6 +888,8 @@ function startSite(e) {
     videoSection.style.display = 'flex';
     videoSection.classList.add('fade-in');
     footer.style.display = 'block';
+    document.getElementById('mainVideo').style.display = 'block';
+    document.getElementById('glitch').style.display = 'block';
     video.play().catch(err => console.error("⚠️ Ошибка воспроизведения:", err));
     setTimeout(() => { overlay.style.opacity = '0'; }, 100);
   }, 500);
