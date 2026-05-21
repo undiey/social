@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ульяшка</title>
+<title>Ульяна</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 html, body {
@@ -732,4 +732,157 @@ function updateStatus() {
 updateStatus();
 setInterval(updateStatus, 60000);
 
-// ======= СООБЩЕНИЕ ПРИ КЛИКЕ НА СТАТУС ===
+// ======= СООБЩЕНИЕ ПРИ КЛИКЕ НА СТАТУС =======
+let statusMsgOpen = false;
+let typewriterTimer = null;
+
+function toggleStatusMessage() {
+  const badge = document.getElementById('status-badge');
+  const msg = document.getElementById('status-message');
+  const hour = new Date().getHours();
+  const isOnline = hour >= 8 && hour < 22;
+
+  if (statusMsgOpen) {
+    msg.classList.remove('visible');
+    statusMsgOpen = false;
+    if (typewriterTimer) clearTimeout(typewriterTimer);
+    return;
+  }
+
+  // Позиционируем под бейджем по центру экрана
+  const rect = badge.getBoundingClientRect();
+  msg.style.top = (rect.bottom + 8) + 'px';
+  msg.style.left = '50%';
+  msg.textContent = '';
+  msg.classList.add('visible');
+  statusMsgOpen = true;
+
+  const text = isOnline
+    ? 'Строю воздушные замки. Кирпичики — твои сообщения.'
+    : 'Ушла искать радугу за дождем. Вернусь, когда высплюсь или просплю эту жизнь.';
+
+  let i = 0;
+  function typeNext() {
+    if (i < text.length) {
+      msg.textContent += text[i];
+      i++;
+      typewriterTimer = setTimeout(typeNext, 38 + Math.random() * 30);
+    }
+  }
+  typeNext();
+}
+// ======= ПАСХАЛКА 67 =======
+let sixSevenState = 0; // 0=скрыто, 1=67, 2=скрыто, 3=люблю
+
+function sixSeven() {
+  sixSevenState = (sixSevenState + 1) % 4;
+
+  const result = document.getElementById('sixtyseven-result');
+  const username = document.getElementById('username');
+  const uRect = username.getBoundingClientRect();
+
+  // Скрываем
+  if (sixSevenState === 0 || sixSevenState === 2) {
+    result.style.opacity = '0';
+    setTimeout(() => { result.innerHTML = ''; }, 500);
+    return;
+  }
+
+  // Позиция — над ником
+  const targetY = uRect.top - 90;
+  result.style.top = targetY + 'px';
+  result.innerHTML = '';
+  result.style.opacity = '0';
+
+  if (sixSevenState === 1) {
+    // Анимация: 6 и 7 медленно появляются и съезжаются
+    result.innerHTML = `
+      <span class="big-num">
+        <span id="digit6" style="display:inline-block;opacity:0;transform:translateX(-60px);transition:opacity 0.8s ease, transform 1.2s ease">6</span>
+        <span id="digit7" style="display:inline-block;opacity:0;transform:translateX(60px);transition:opacity 0.8s ease, transform 1.2s ease">7</span>
+      </span>
+      <span class="sub-text" id="sixseventext" style="opacity:0"></span>
+    `;
+    result.style.opacity = '1';
+
+    setTimeout(() => {
+      document.getElementById('digit6').style.opacity = '1';
+      document.getElementById('digit6').style.transform = 'translateX(0)';
+      document.getElementById('digit7').style.opacity = '1';
+      document.getElementById('digit7').style.transform = 'translateX(0)';
+    }, 50);
+
+    // Бегущий текст "six seven"
+    setTimeout(() => {
+      const el = document.getElementById('sixseventext');
+      if (!el) return;
+      el.style.opacity = '1';
+      const text = 'six seven';
+      let i = 0;
+      function typeIt() {
+        if (!document.getElementById('sixseventext')) return;
+        if (i < text.length) {
+          el.textContent += text[i];
+          i++;
+          setTimeout(typeIt, 80);
+        }
+      }
+      typeIt();
+    }, 1000);
+
+  } else if (sixSevenState === 3) {
+    // Красноватый текст снизу
+    result.style.top = (uRect.top - 50) + 'px';
+    result.innerHTML = `<span class="love-text" id="lovetext" style="opacity:0"></span>`;
+    result.style.opacity = '1';
+    setTimeout(() => {
+      const el = document.getElementById('lovetext');
+      if (!el) return;
+      el.style.opacity = '1';
+      const text = 'Люблю Ульяну ❤️';
+      let i = 0;
+      function typeIt() {
+        if (!document.getElementById('lovetext')) return;
+        if (i < text.length) {
+          el.textContent += text[i];
+          i++;
+          setTimeout(typeIt, 70);
+        }
+      }
+      typeIt();
+    }, 100);
+  }
+}
+
+
+let nameMsgOpen = false;
+let nameTypeTimer = null;
+
+function toggleNameMessage() {
+  const msg = document.getElementById('name-message');
+  if (nameMsgOpen) {
+    msg.classList.remove('visible');
+    msg.textContent = '';
+    nameMsgOpen = false;
+    if (nameTypeTimer) clearTimeout(nameTypeTimer);
+    return;
+  }
+  msg.textContent = '';
+  msg.classList.add('visible');
+  nameMsgOpen = true;
+  const text = 'Я Ульяна, йоу';
+  let i = 0;
+  function typeNext() {
+    if (i < text.length) {
+      msg.textContent += text[i];
+      i++;
+      nameTypeTimer = setTimeout(typeNext, 45 + Math.random() * 35);
+    }
+  }
+  typeNext();
+}
+
+
+</script>
+</body>
+</html>
