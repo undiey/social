@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>enalcee</title>
+<title>Ульяна</title>
 <script src="https://kit.fontawesome.com/b617dc6679.js" crossorigin="anonymous"></script>
 <style>
 html, body {
@@ -732,4 +732,15 @@ function toggleNameMessage() {
   let i = 0;
   function typeNext() {
     if (i < text.length) {
-      msg.textContent += text[i
+      msg.textContent += text[i];
+      i++;
+      nameTypeTimer = setTimeout(typeNext, 45 + Math.random() * 35);
+    }
+  }
+  typeNext();
+}
+
+
+</script>
+</body>
+</html>
