@@ -734,6 +734,7 @@ function startSite(e) {
 
   // Плавный переход
   overlay.style.opacity = '1';
+  audio.play().catch(err => console.error("⚠️ Ошибка воспроизведения:", err));
   setTimeout(() => {
     startScreen.style.display = 'none';
     videoSection.style.display = 'flex';
@@ -741,7 +742,6 @@ function startSite(e) {
     footer.style.display = 'block';
     document.getElementById('mainBg').style.display = 'block';
     document.getElementById('glitch').style.display = 'block';
-    audio.play().catch(err => console.error("⚠️ Ошибка воспроизведения:", err));
     setTimeout(() => { overlay.style.opacity = '0'; }, 100);
   }, 500);
 }
