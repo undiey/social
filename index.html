@@ -480,8 +480,8 @@ video#mainVideo {
   animation-delay: var(--delay);
 }
 @keyframes bgStarGlow {
-  0%   { opacity: 0.15; text-shadow: 0 0 4px white; }
-  100% { opacity: 1;    text-shadow: 0 0 10px white, 0 0 22px rgba(255,255,255,0.6); }
+  0%   { opacity: 0.4; text-shadow: 0 0 6px white, 0 0 14px rgba(255,255,255,0.7); }
+  100% { opacity: 1;   text-shadow: 0 0 14px white, 0 0 30px white, 0 0 50px rgba(255,255,255,0.8); }
 }
 
 /* Убираем синий highlight со всех ссылок и кликабельных элементов */
@@ -750,11 +750,10 @@ footer a {
   <div id="glitch"></div>
 
   <div id="avatar-wrap">
-    <div id="avatar" onclick="sixSeven()">
+    <div id="avatar" onclick="toggleStars()">
       <img src="avatar.png" alt="avatar" draggable="false" oncontextmenu="return false;">
     </div>
   </div>
-  <div id="sixtyseven-result"></div>
   <div id="username" onclick="toggleNameMessage()">𓆩undiey𓆪</div>
   <div id="name-message"></div>
   <div class="social-box">
@@ -778,17 +777,17 @@ footer a {
 
   <div id="pause-button" onclick="togglePlayback()"><i id="pause-icon" class="fas fa-pause"></i></div>
   <footer>© 2023 - 2028 Все права защищены — Контент защищён авторским правом. Создатель 🖤 <a href="https://t.me/undiey" target="_blank">@undiey</a></footer>
-  <span id="meow-toggle" onclick="toggleStars()">meow</span>
 </div>
 
 <script>
 // Звёзды вкл/выкл
-let starsVisible = true;
+let starsVisible = false;
 function toggleStars() {
   const layer = document.getElementById('star-layer');
   starsVisible = !starsVisible;
   layer.style.transition = 'opacity 2s ease';
   layer.style.opacity = starsVisible ? '1' : '0';
+  layer.style.transition = 'opacity 0.5s ease';
   if (!starsVisible) {
     setTimeout(() => { layer.style.pointerEvents = 'none'; }, 2000);
   }
@@ -798,7 +797,7 @@ function toggleStars() {
 function spawnStars() {
   const layer = document.getElementById('star-layer');
   if (layer.children.length > 0) return;
-  const count = 30;
+  const count = 40;
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
     s.className = 'bg-star';
@@ -926,77 +925,7 @@ function toggleStatusMessage() {
   }
   typeNext();
 }
-// ======= ПАСХАЛКА 67 =======
-let sixSevenState = 0; // 0=скрыто, 1=67, 2=скрыто, 3=люблю
-
-function sixSeven() {
-  sixSevenState = (sixSevenState + 1) % 4;
-
-  const result = document.getElementById('sixtyseven-result');
-  const username = document.getElementById('username');
-
-  // Скрываем
-  if (sixSevenState === 0 || sixSevenState === 2) {
-    result.style.opacity = '0';
-    setTimeout(() => { result.innerHTML = ''; }, 500);
-    return;
-  }
-
-  // Позиция — над ником, привязана к контенту (не к экрану)
-  const targetY = username.offsetTop - 90;
-  result.style.top = targetY + 'px';
-  result.innerHTML = '';
-  result.style.opacity = '0';
-
-  if (sixSevenState === 1) {
-    result.innerHTML = `
-      <span class="big-num">
-        <span id="digit6" style="display:inline-block;opacity:0;transform:translateX(-60px);transition:opacity 0.8s ease, transform 1.2s ease">6</span>
-        <span id="digit7" style="display:inline-block;opacity:0;transform:translateX(60px);transition:opacity 0.8s ease, transform 1.2s ease">7</span>
-      </span>
-      <span class="sub-text" id="sixseventext" style="opacity:0"></span>
-    `;
-    result.style.opacity = '1';
-
-    setTimeout(() => {
-      document.getElementById('digit6').style.opacity = '1';
-      document.getElementById('digit6').style.transform = 'translateX(0)';
-      document.getElementById('digit7').style.opacity = '1';
-      document.getElementById('digit7').style.transform = 'translateX(0)';
-    }, 50);
-
-    setTimeout(() => {
-      const el = document.getElementById('sixseventext');
-      if (!el) return;
-      el.style.opacity = '1';
-      const text = 'six seven';
-      let i = 0;
-      function typeIt() {
-        if (!document.getElementById('sixseventext')) return;
-        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 80); }
-      }
-      typeIt();
-    }, 1000);
-
-  } else if (sixSevenState === 3) {
-    result.style.top = (username.offsetTop - 50) + 'px';
-    result.innerHTML = `<span class="love-text" style="opacity:0"><span id="lovetext-line1"></span></span>`;
-    result.style.opacity = '1';
-    setTimeout(() => {
-      const wrap = result.querySelector('.love-text');
-      const el = document.getElementById('lovetext-line1');
-      if (!el || !wrap) return;
-      wrap.style.opacity = '1';
-      const text = 'Люблю❤️Ульяну';
-      let i = 0;
-      function typeIt() {
-        if (!document.getElementById('lovetext-line1')) return;
-        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 70); }
-      }
-      typeIt();
-    }, 100);
-  }
-}
+// ======= ПАСХАЛКА УДАЛЕНА =======
 
 
 let nameMsgOpen = false;
