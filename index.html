@@ -417,6 +417,24 @@ footer a {
   text-decoration: none;
   color: #ff6b6b;
 }
+.footer-copy-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.footer-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.3);
+  flex-shrink: 0;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  vertical-align: middle;
+}
 
 /* Статус online/offline */
 #status-badge {
@@ -644,7 +662,13 @@ footer a {
   </div>
 
   <div id="pause-button" onclick="togglePlayback()"><i id="pause-icon" class="fas fa-pause"></i></div>
-  <footer>© 2023 - 2028 Все права защищены — Контент защищён авторским правом.<br>Создатель 🖤 <a href="https://t.me/undiey" target="_blank">@undiey</a></footer>
+  <footer>
+    <span class="footer-copy-line">
+      <img src="02.png" alt="" class="footer-avatar">
+      2023 - 2028 Все права защищены — Контент защищён авторским правом.
+    </span><br>
+    Создатель 🖤 <a href="https://t.me/undiey" target="_blank">@undiey</a>
+  </footer>
 </div>
 
 <script>
