@@ -421,19 +421,21 @@ footer a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  flex-wrap: wrap;
+  gap: 5px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 .footer-avatar {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 0;
   object-fit: cover;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: none;
   flex-shrink: 0;
   pointer-events: none;
   -webkit-user-drag: none;
   vertical-align: middle;
+  display: inline-block;
 }
 
 /* Статус online/offline */
