@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ульяна</title>
+<title>enalcee</title>
 <script src="https://kit.fontawesome.com/b617dc6679.js" crossorigin="anonymous"></script>
 <style>
 html, body {
@@ -31,6 +31,9 @@ html, body {
   color: white;
   text-shadow: 0 0 10px white, 0 0 30px #ccc;
   animation: flicker 1.2s infinite alternate;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
 }
 @keyframes flicker {
   0% { opacity: 0.8; text-shadow: 0 0 6px white; }
@@ -61,6 +64,14 @@ html, body {
   animation: flicker 1.5s infinite alternate;
   cursor: pointer;
   transition: transform 0.1s;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
 }
 #start-screen h1:active {
   transform: scale(0.92);
@@ -348,8 +359,10 @@ footer {
   width: 100%;
   text-align: center;
   font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  font-weight: bold;
+  color: rgba(255,255,255,0.92);
+  font-weight: 300;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 0.1em;
   text-shadow: 0 0 8px rgba(0,0,0,0.8);
   z-index: 2;
   margin-top: 8px;
@@ -719,15 +732,4 @@ function toggleNameMessage() {
   let i = 0;
   function typeNext() {
     if (i < text.length) {
-      msg.textContent += text[i];
-      i++;
-      nameTypeTimer = setTimeout(typeNext, 45 + Math.random() * 35);
-    }
-  }
-  typeNext();
-}
-
-
-</script>
-</body>
-</html>
+      msg.textContent += text[i
