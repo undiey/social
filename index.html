@@ -279,6 +279,21 @@ img#mainBg {
   50%       { text-shadow: 0 0 18px rgba(255,255,255,1), 0 0 40px rgba(255,255,255,0.7), 0 0 70px rgba(255,255,255,0.3); }
 }
 
+/* Сердечко под ником */
+#username-heart {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 4px;
+  z-index: 2;
+  animation: heartPulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.4)); }
+  50%       { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
+}
+
 /* Сообщение под ником */
 #name-message {
   font-size: 13px;
@@ -301,8 +316,8 @@ img#mainBg {
   margin-top: 4px;
   margin-bottom: 10px;
   padding: 0 20px;
-  width: 300px;
-  max-width: 90vw;
+  width: 230px;
+  max-width: 75vw;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -318,7 +333,7 @@ img#mainBg {
   background: rgba(255,255,255,0.07);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.75);
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.15s ease;
   display: flex;
   align-items: center;
@@ -328,11 +343,6 @@ img#mainBg {
   font-weight: 400;
   -webkit-tap-highlight-color: transparent;
   box-shadow: 0 2px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
-  animation: linkGlow 4s ease-in-out infinite;
-}
-@keyframes linkGlow {
-  0%, 100% { box-shadow: 0 2px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0px rgba(255,255,255,0); }
-  50%       { box-shadow: 0 2px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 18px rgba(255,255,255,0.18), 0 0 40px rgba(255,255,255,0.07); }
 }
 .social-box a:hover {
   background: rgba(255,255,255,0.13);
@@ -372,7 +382,11 @@ img#mainBg {
 .social-link-name {
   letter-spacing: 0.18em;
   font-size: 13px;
-  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+  animation: textGlow 3s ease-in-out infinite;
+}
+@keyframes textGlow {
+  0%, 100% { text-shadow: 0 0 6px rgba(255,255,255,0.4); }
+  50%       { text-shadow: 0 0 14px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,0.5); }
 }
 .social-arrow {
   font-size: 16px;
@@ -579,14 +593,14 @@ footer a {
   #status-badge { top: 12px; }
   #avatar { width: 220px; height: 220px; }
   #username { font-size: 22px; }
-  .social-box { width: 90vw; }
+
   #video-section { padding: 50px 16px 16px 16px; }
 }
 
 @media (min-width: 768px) {
   #avatar { width: 300px; height: 300px; }
   #username { font-size: 30px; }
-  .social-box { width: 360px; }
+  .social-box { width: 270px; }
   #video-section {
     justify-content: center;
     padding: 80px 40px 40px 40px;
@@ -728,7 +742,9 @@ footer a {
     </div>
   </div>
   <div id="username" onclick="toggleNameMessage()">𓆩undiey𓆪</div>
+  <div id="username-heart">🤍</div>
   <div id="name-message"></div>
+
   <div class="social-box">
     <a href="https://t.me/tgkuliana" target="_blank">
       <div class="social-link-left"><div class="social-icon-wrap"><i class="fab fa-telegram"></i></div><span class="social-link-name">TELEGRAM</span></div>
