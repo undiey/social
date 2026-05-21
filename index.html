@@ -102,11 +102,14 @@ html, body {
 #video-section {
   display: none;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
-  height: 100%;
+  min-height: 100%;
   position: relative;
+  padding: 60px 20px 100px 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 video#mainVideo {
   position: fixed;
@@ -145,19 +148,19 @@ video#mainVideo {
   100% { opacity: 0.03; transform: translate(0,0); }
 }
 
-/* Аватар — без покачивания, с крыльями через псевдоэлемент */
+/* Аватар */
 #avatar-wrap {
   position: relative;
   z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
-  margin-top: 10px;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 #avatar {
-  width: 280px;
-  height: 280px;
+  width: 260px;
+  height: 260px;
   overflow: visible;
   position: relative;
   z-index: 3;
@@ -202,14 +205,14 @@ video#mainVideo {
 
 /* Ник */
 #username {
-  font-size: 22px;
+  font-size: 26px;
   color: white;
   text-shadow: 0 0 14px rgba(255,255,255,0.8);
-  margin-bottom: 10px;
+  margin-top: 6px;
+  margin-bottom: 6px;
   font-weight: 400;
   letter-spacing: 0.18em;
   font-family: 'Georgia', serif;
-  will-change: transform;
   z-index: 2;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -221,8 +224,8 @@ video#mainVideo {
   color: #ff6b6b;
   font-family: 'Arial', sans-serif;
   letter-spacing: 0.08em;
-  min-height: 20px;
-  margin-bottom: 18px;
+  min-height: 16px;
+  margin-bottom: 10px;
   z-index: 2;
   text-shadow: 0 0 8px rgba(255,100,100,0.5);
   opacity: 0;
@@ -235,7 +238,7 @@ video#mainVideo {
 /* Соцсети — без рамки, только линии */
 .social-box {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 0 20px;
   width: 280px;
   max-width: 90vw;
@@ -321,8 +324,8 @@ a, button, div[onclick] {
   transition: box-shadow 0.3s ease, transform 0.15s ease;
   color: white;
   font-size: 16px;
-  margin-bottom: 20px;
-  margin-top: 6px;
+  margin-bottom: 10px;
+  margin-top: 8px;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
@@ -341,15 +344,17 @@ a, button, div[onclick] {
 /* Футер */
 footer {
   display: none;
-  position: absolute;
-  bottom: 20px;
+  position: relative;
   width: 100%;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(255,255,255,0.7);
   font-weight: bold;
   text-shadow: 0 0 8px rgba(0,0,0,0.8);
   z-index: 2;
+  margin-top: 8px;
+  padding-bottom: 16px;
+  box-sizing: border-box;
 }
 footer a {
   text-decoration: none;
@@ -416,6 +421,17 @@ footer a {
   #status-badge {
     top: 12px;
   }
+  #avatar { width: 220px; height: 220px; }
+  #username { font-size: 22px; }
+  .social-box { width: 90vw; }
+  #video-section { padding: 50px 16px 80px 16px; }
+}
+
+@media (min-width: 768px) {
+  #avatar { width: 300px; height: 300px; }
+  #username { font-size: 30px; }
+  .social-box { width: 360px; }
+  #video-section { padding: 80px 40px 100px 40px; }
 }
 #status-dot {
   width: 9px;
