@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ульяна</title>
-<script src="https://kit.fontawesome.com/b617dc6679.js" crossorigin="anonymous"></script>
+<title>Ульяшка</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 html, body {
   margin: 0;
@@ -268,7 +268,7 @@ video#mainVideo {
   color: white;
   text-decoration: none;
   padding: 14px 4px;
-  border-bottom: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
   border-radius: 0;
   background: none;
   transition: opacity 0.3s ease;
@@ -279,9 +279,18 @@ video#mainVideo {
   font-family: 'Arial', sans-serif;
   font-weight: 400;
   -webkit-tap-highlight-color: transparent;
+  animation: linePulse 3s ease-in-out infinite alternate;
 }
 .social-box a:first-child {
-  border-top: 1px solid rgba(255,255,255,0.25);
+  border-top: 1px solid rgba(255,255,255,0.5);
+}
+.social-box a:nth-child(2) { animation-delay: 0.5s; }
+.social-box a:nth-child(3) { animation-delay: 1s; }
+.social-box a:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes linePulse {
+  0%   { border-color: rgba(255,255,255,0.2); box-shadow: none; }
+  100% { border-color: rgba(255,255,255,0.7); box-shadow: 0 1px 10px rgba(255,255,255,0.25), 0 -1px 10px rgba(255,255,255,0.1); }
 }
 .social-box a:hover, .social-box a:active {
   opacity: 0.65;
@@ -483,8 +492,57 @@ footer a {
   letter-spacing: 0.04em;
   color: white;
 }
+/* 67 пасхалка */
+#sixtyseven-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  display: none;
+}
+#sixtyseven-result {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9991;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+}
+#sixtyseven-result .big-num {
+  font-size: 64px;
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,200,200,0.6);
+  line-height: 1;
+  display: block;
+  letter-spacing: 0.1em;
+}
+#sixtyseven-result .sub-text {
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  display: block;
+  margin-top: 8px;
+  min-height: 22px;
+}
+#sixtyseven-result .love-text {
+  font-size: 18px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: #ff6b6b;
+  text-shadow: 0 0 12px rgba(255,100,100,0.6);
+  display: block;
+  transition: opacity 0.4s ease;
+}
 </style>
-</head>
 <body>
 <div id="loader">
   <span id="loading-text">Загрузка</span>
@@ -511,10 +569,11 @@ footer a {
   <div id="glitch"></div>
 
   <div id="avatar-wrap">
-    <div id="avatar">
+    <div id="avatar" onclick="sixSeven()">
       <img src="avatar.png" alt="avatar" draggable="false" oncontextmenu="return false;">
     </div>
   </div>
+  <div id="sixtyseven-result"></div>
   <div id="username" onclick="toggleNameMessage()">𓆩undiey𓆪</div>
   <div id="name-message"></div>
   <div class="social-box">
@@ -673,74 +732,4 @@ function updateStatus() {
 updateStatus();
 setInterval(updateStatus, 60000);
 
-// ======= СООБЩЕНИЕ ПРИ КЛИКЕ НА СТАТУС =======
-let statusMsgOpen = false;
-let typewriterTimer = null;
-
-function toggleStatusMessage() {
-  const badge = document.getElementById('status-badge');
-  const msg = document.getElementById('status-message');
-  const hour = new Date().getHours();
-  const isOnline = hour >= 8 && hour < 22;
-
-  if (statusMsgOpen) {
-    msg.classList.remove('visible');
-    statusMsgOpen = false;
-    if (typewriterTimer) clearTimeout(typewriterTimer);
-    return;
-  }
-
-  // Позиционируем под бейджем по центру экрана
-  const rect = badge.getBoundingClientRect();
-  msg.style.top = (rect.bottom + 8) + 'px';
-  msg.style.left = '50%';
-  msg.textContent = '';
-  msg.classList.add('visible');
-  statusMsgOpen = true;
-
-  const text = isOnline
-    ? 'Строю воздушные замки. Кирпичики — твои сообщения.'
-    : 'Ушла искать радугу за дождем. Вернусь, когда высплюсь или просплю эту жизнь.';
-
-  let i = 0;
-  function typeNext() {
-    if (i < text.length) {
-      msg.textContent += text[i];
-      i++;
-      typewriterTimer = setTimeout(typeNext, 38 + Math.random() * 30);
-    }
-  }
-  typeNext();
-}
-// ======= НИК — ПЕЧАТАЮЩИЙСЯ ТЕКСТ =======
-let nameMsgOpen = false;
-let nameTypeTimer = null;
-
-function toggleNameMessage() {
-  const msg = document.getElementById('name-message');
-  if (nameMsgOpen) {
-    msg.classList.remove('visible');
-    msg.textContent = '';
-    nameMsgOpen = false;
-    if (nameTypeTimer) clearTimeout(nameTypeTimer);
-    return;
-  }
-  msg.textContent = '';
-  msg.classList.add('visible');
-  nameMsgOpen = true;
-  const text = 'Я Ульяна, йоу';
-  let i = 0;
-  function typeNext() {
-    if (i < text.length) {
-      msg.textContent += text[i];
-      i++;
-      nameTypeTimer = setTimeout(typeNext, 45 + Math.random() * 35);
-    }
-  }
-  typeNext();
-}
-
-
-</script>
-</body>
-</html>
+// ======= СООБЩЕНИЕ ПРИ КЛИКЕ НА СТАТУС ===
