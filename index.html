@@ -362,7 +362,27 @@ video#mainVideo {
   100% { text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 24px rgba(255,255,255,0.5); }
 }
 
-/* Звёздочка — 4-лучевая, сидит на линии снизу справа */
+/* Символ ⸸ слева */
+.left-glyph {
+  font-size: 16px;
+  color: white;
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.9),
+    0 0 14px rgba(255,255,255,0.6),
+    0 0 28px rgba(255,255,255,0.3);
+  animation: glyphTwinkle 3s ease-in-out infinite alternate;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.social-box a:nth-child(1) .left-glyph { animation-delay: 0s; }
+.social-box a:nth-child(2) .left-glyph { animation-delay: 0.5s; }
+.social-box a:nth-child(3) .left-glyph { animation-delay: 1s; }
+.social-box a:nth-child(4) .left-glyph { animation-delay: 1.5s; }
+
+@keyframes glyphTwinkle {
+  0%   { opacity: 0.8; text-shadow: 0 0 4px rgba(255,255,255,0.7), 0 0 10px rgba(255,255,255,0.3); transform: scale(0.95); }
+  100% { opacity: 1;   text-shadow: 0 0 8px rgba(255,255,255,1),   0 0 20px rgba(255,255,255,0.7), 0 0 36px rgba(255,255,255,0.3); transform: scale(1.1); }
+}
 .social-box a {
   position: relative;
 }
@@ -698,19 +718,19 @@ footer a {
   <div id="name-message"></div>
   <div class="social-box">
     <a href="https://t.me/tgkuliana" target="_blank">
-      <div class="social-link-left"><i class="fab fa-telegram"></i><span class="social-link-name">TELEGRAM</span></div>
+      <div class="social-link-left"><span class="left-glyph">⸸</span><i class="fab fa-telegram"></i><span class="social-link-name">TELEGRAM</span></div>
       <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
     </a>
     <a href="https://www.tiktok.com/@undiey" target="_blank">
-      <div class="social-link-left"><i class="fab fa-tiktok"></i><span class="social-link-name">TIKTOK</span></div>
+      <div class="social-link-left"><span class="left-glyph">⸸</span><i class="fab fa-tiktok"></i><span class="social-link-name">TIKTOK</span></div>
       <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
     </a>
     <a href="https://www.instagram.com/undieyy?igsh=dWlkazF4b2xlNWlk" target="_blank">
-      <div class="social-link-left"><i class="fab fa-instagram"></i><span class="social-link-name">INSTAGRAM</span></div>
+      <div class="social-link-left"><span class="left-glyph">⸸</span><i class="fab fa-instagram"></i><span class="social-link-name">INSTAGRAM</span></div>
       <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
     </a>
     <a href="https://pin.it/1jaSwwc2g" target="_blank">
-      <div class="social-link-left"><i class="fab fa-pinterest"></i><span class="social-link-name">PINTEREST</span></div>
+      <div class="social-link-left"><span class="left-glyph">⸸</span><i class="fab fa-pinterest"></i><span class="social-link-name">PINTEREST</span></div>
       <span class="sparkle"><span class="star-diag"></span><span class="star-diag"></span></span>
     </a>
   </div>
