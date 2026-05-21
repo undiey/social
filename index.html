@@ -77,6 +77,41 @@ html, body {
   transform: scale(0.92);
 }
 
+/* Подсказка "жми" */
+#hint-wrap {
+  position: absolute;
+  top: calc(50% + 30px);
+  left: calc(50% + 10px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+  opacity: 0;
+  animation: none;
+  pointer-events: none;
+}
+#hint-wrap.visible {
+  animation: hintFadeIn 0.6s ease forwards;
+}
+@keyframes hintFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#hint-text {
+  font-size: 15px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.75);
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+#hint-arrow {
+  width: 90px;
+  height: 100px;
+  opacity: 0.65;
+}
+
 /* Канвас для частиц */
 #particle-canvas {
   position: fixed;
@@ -559,6 +594,19 @@ footer a {
 
 <div id="start-screen">
   <h1 onclick="startSite(event)">meow</h1>
+  <div id="hint-wrap">
+    <svg id="hint-arrow" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Начало снизу-справа, петля в середине, конец уходит вверх-влево со стрелкой -->
+      <path d="M 100,110 C 75,105 55,95 52,78 C 49,65 58,58 65,62 C 72,66 70,76 62,76 C 54,76 50,68 53,60 C 58,45 45,25 28,12"
+        fill="none" stroke="white" stroke-width="2" stroke-dasharray="6,4"
+        stroke-linecap="round"/>
+      <!-- Наконечник вверх-влево -->
+      <polyline points="38,10 28,12 30,23"
+        fill="none" stroke="white" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span id="hint-text">жми</span>
+  </div>
 </div>
 
 <div id="video-section">
@@ -603,7 +651,13 @@ footer a {
 window.addEventListener("load", () => {
   setTimeout(() => {
     document.getElementById('loader').remove();
-    document.getElementById('start-screen').style.display = 'flex';
+    const startScreen = document.getElementById('start-screen');
+    startScreen.style.display = 'flex';
+    // Подсказка через 1.5 сек
+    setTimeout(() => {
+      const hint = document.getElementById('hint-wrap');
+      if (hint) hint.classList.add('visible');
+    }, 1500);
   }, 3000);
 });
 
@@ -833,16 +887,19 @@ function sixSeven() {
   } else if (sixSevenState === 3) {
     // Красноватый текст снизу
     result.style.top = (uRect.top - 50) + 'px';
-    result.innerHTML = `<span class="love-text" id="lovetext" style="opacity:0"></span>`;
+    result.innerHTML = `<span class="love-text" style="opacity:0">
+      <span id="lovetext-line1"></span>
+    </span>`;
     result.style.opacity = '1';
     setTimeout(() => {
-      const el = document.getElementById('lovetext');
-      if (!el) return;
-      el.style.opacity = '1';
+      const wrap = result.querySelector('.love-text');
+      const el = document.getElementById('lovetext-line1');
+      if (!el || !wrap) return;
+      wrap.style.opacity = '1';
       const text = 'Люблю❤️Ульяну';
       let i = 0;
       function typeIt() {
-        if (!document.getElementById('lovetext')) return;
+        if (!document.getElementById('lovetext-line1')) return;
         if (i < text.length) {
           el.textContent += text[i];
           i++;
