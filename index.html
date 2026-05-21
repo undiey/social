@@ -536,14 +536,15 @@ footer a {
   display: none;
 }
 #sixtyseven-result {
-  position: fixed;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9991;
   text-align: center;
   pointer-events: none;
+  z-index: 10;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
+  width: max-content;
   white-space: nowrap;
 }
 #sixtyseven-result .big-num {
@@ -833,7 +834,6 @@ function sixSeven() {
 
   const result = document.getElementById('sixtyseven-result');
   const username = document.getElementById('username');
-  const uRect = username.getBoundingClientRect();
 
   // Скрываем
   if (sixSevenState === 0 || sixSevenState === 2) {
@@ -842,14 +842,13 @@ function sixSeven() {
     return;
   }
 
-  // Позиция — над ником
-  const targetY = uRect.top - 90;
+  // Позиция — над ником, привязана к контенту (не к экрану)
+  const targetY = username.offsetTop - 90;
   result.style.top = targetY + 'px';
   result.innerHTML = '';
   result.style.opacity = '0';
 
   if (sixSevenState === 1) {
-    // Анимация: 6 и 7 медленно появляются и съезжаются
     result.innerHTML = `
       <span class="big-num">
         <span id="digit6" style="display:inline-block;opacity:0;transform:translateX(-60px);transition:opacity 0.8s ease, transform 1.2s ease">6</span>
@@ -866,7 +865,6 @@ function sixSeven() {
       document.getElementById('digit7').style.transform = 'translateX(0)';
     }, 50);
 
-    // Бегущий текст "six seven"
     setTimeout(() => {
       const el = document.getElementById('sixseventext');
       if (!el) return;
@@ -875,21 +873,14 @@ function sixSeven() {
       let i = 0;
       function typeIt() {
         if (!document.getElementById('sixseventext')) return;
-        if (i < text.length) {
-          el.textContent += text[i];
-          i++;
-          setTimeout(typeIt, 80);
-        }
+        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 80); }
       }
       typeIt();
     }, 1000);
 
   } else if (sixSevenState === 3) {
-    // Красноватый текст снизу
-    result.style.top = (uRect.top - 50) + 'px';
-    result.innerHTML = `<span class="love-text" style="opacity:0">
-      <span id="lovetext-line1"></span>
-    </span>`;
+    result.style.top = (username.offsetTop - 50) + 'px';
+    result.innerHTML = `<span class="love-text" style="opacity:0"><span id="lovetext-line1"></span></span>`;
     result.style.opacity = '1';
     setTimeout(() => {
       const wrap = result.querySelector('.love-text');
@@ -900,11 +891,7 @@ function sixSeven() {
       let i = 0;
       function typeIt() {
         if (!document.getElementById('lovetext-line1')) return;
-        if (i < text.length) {
-          el.textContent += text[i];
-          i++;
-          setTimeout(typeIt, 70);
-        }
+        if (i < text.length) { el.textContent += text[i]; i++; setTimeout(typeIt, 70); }
       }
       typeIt();
     }, 100);
